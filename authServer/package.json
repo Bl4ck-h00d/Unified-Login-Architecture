@@ -1,0 +1,22 @@
+{
+  "name": "authserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Rohan Kumar Jha",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.7.4",
+    "ejs-mate": "^2.3.0",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "hashids": "^1.2.2",
+    "jsonwebtoken": "^8.3.0",
+    "morgan": "^1.9.0",
+    "uuid": "^3.4.0"
+  }
+}

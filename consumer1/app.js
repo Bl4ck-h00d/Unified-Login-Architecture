@@ -6,6 +6,7 @@ const session = require("express-session");
 const app = express();
 
 const isAuthenticated = require("./isAuthenticated");
+const checkToken = require("./checkToken");
 
 app.use(
   session({
@@ -21,6 +22,8 @@ app.use(morgan("dev"));
 app.engine("ejs", engine);
 app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
+
+app.use(checkToken());
 
 app.get("/", isAuthenticated, (req, res, next) => {
   res.render("index", {
