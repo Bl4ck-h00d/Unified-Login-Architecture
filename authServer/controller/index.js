@@ -2,6 +2,8 @@ const uuidv4 = require("uuid/v4");
 const Hashids = require("hashids");
 const URL = require("url").URL;
 
+const { generateJWTtoken } = require("./jwt");
+
 const AUTH = "authorization";
 const BEARER = "bearer";
 
@@ -148,12 +150,32 @@ const login = (req, res, next) => {
 };
 
 
+const generatePayload = authToken => {
+  const globalSessionToken = authTokenCache[authToken][0]; //global session ID
+  const appName = authTokenCache[authToken][1];
+  const userEmail = userSession[globalSessionToken];
+  const user = userDB[userEmail];
+  const appPolicy = user.appPolicy[appName];
+  const email = appPolicy.shareEmail === true ? userEmail : undefined;
+  const payload = {
+    ...{ ...appPolicy },
+    ...{
+      email,
+      shareEmail: undefined,
+      uid: user.userId,
+      globalSessionID: globalSessionToken
+    }
+  };
+  return payload;
+};
+
+
+
+
 const verifyAuthToken = async (req, res, next) => {
   const consumerToken = appTokenFromReq(req);
   const { authToken } = req.query;
-  // if the application token is not present or authToken request is invalid
-  // if the authToken is not present in the cache some is
-  // smart.
+  
   if (
     consumerToken == null ||
     authToken == null ||
@@ -162,7 +184,7 @@ const verifyAuthToken = async (req, res, next) => {
     return res.status(400).json({ message: "Bad Request" });
   }
 
-  // if the consumerToken is present and check if it's valid for the application
+  
   const appName = authTokenCache[authToken][1];
   const globalSessionToken = authTokenCache[authToken][0];
   
@@ -173,8 +195,17 @@ const verifyAuthToken = async (req, res, next) => {
   ) {
     return res.status(403).json({ message: "Unauthorized" });
   }
+
+  const payload = generatePayload(authToken);
+
+  const token = await generateJWTtoken(payload);
+ 
+  delete authTokenCache[authToken];
+  return res.status(200).json({ token });
   
 };
+
+
 
 
 
