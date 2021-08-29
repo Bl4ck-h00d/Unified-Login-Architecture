@@ -41,10 +41,12 @@ const appTokenFromReq = AuthHeaderBearerToken();
 // app token to validate the request is coming from the authenticated server only.
 const applicationDB = {
   consumer1: "k2P8xkPR34dSgTAvF36VpGMW2DBL",
+  consumer2: "1g0jJwGmRQhJwvwNOrY4i90kD0m"
 };
 
 const allowedConsumers = {
   "http://127.0.0.1:3020": true,
+  "http://127.0.0.1:3030": true
 };
 
 //remove "-" form generated uuid
@@ -59,6 +61,7 @@ const consumerSession = {};
 
 const consumerName = {
   "http://127.0.0.1:3020": "consumer1",
+  "http://127.0.0.1:3030": "consumer2",
 };
 
 const userDB = {
@@ -67,7 +70,7 @@ const userDB = {
     userId: encode(), // incase you dont want to share the user-email.
     appPolicy: {
       consumer1: { role: "admin", shareEmail: true },
-      
+      consumer2: { role: "user", shareEmail: false }
     }
   }
 };
