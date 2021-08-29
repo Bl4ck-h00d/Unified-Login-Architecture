@@ -147,4 +147,35 @@ const login = (req, res, next) => {
   });
 };
 
+
+const verifyAuthToken = async (req, res, next) => {
+  const consumerToken = appTokenFromReq(req);
+  const { authToken } = req.query;
+  // if the application token is not present or authToken request is invalid
+  // if the authToken is not present in the cache some is
+  // smart.
+  if (
+    consumerToken == null ||
+    authToken == null ||
+    authTokenCache[authToken] == null
+  ) {
+    return res.status(400).json({ message: "Bad Request" });
+  }
+
+  // if the consumerToken is present and check if it's valid for the application
+  const appName = authTokenCache[authToken][1];
+  const globalSessionToken = authTokenCache[authToken][0];
+  
+//Check if app is registered and has been looged in
+  if (
+    consumerToken !== applicationDB[appName] ||
+    consumerSession[globalSessionToken][appName] !== true
+  ) {
+    return res.status(403).json({ message: "Unauthorized" });
+  }
+  
+};
+
+
+
 module.exports = Object.assign({}, { getLogin, login, verifyAuthToken });
