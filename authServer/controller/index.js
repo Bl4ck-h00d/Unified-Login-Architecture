@@ -36,6 +36,7 @@ const AuthHeaderBearerToken = function() {
   return fromAuthHeader(BEARER);
 };
 
+//get bearer token
 const appTokenFromReq = AuthHeaderBearerToken();
 
 // app token to validate the request is coming from the authenticated server only.
@@ -44,6 +45,7 @@ const applicationDB = {
   consumer2: "1g0jJwGmRQhJwvwNOrY4i90kD0m"
 };
 
+//cors
 const allowedConsumers = {
   "http://127.0.0.1:3020": true,
   "http://127.0.0.1:3030": true
@@ -54,8 +56,7 @@ const hashids = new Hashids();
 const deHyphenatedUUID = () => uuidv4().replace(/-/gi, "");
 const encode = () => hashids.encodeHex(deHyphenatedUUID());
 
-// A temporary cahce to store all the application that has login using the current session.
-// It can be useful for variuos audit purpose
+//cache to store session state
 const userSession = {};
 const consumerSession = {};
 
@@ -64,10 +65,11 @@ const consumerName = {
   "http://127.0.0.1:3030": "consumer2",
 };
 
+//user details
 const userDB = {
   "admin@flam.com": {
     password: "123",
-    userId: encode(), // incase you dont want to share the user-email.
+    userId: encode(), 
     appPolicy: {
       consumer1: { role: "admin", shareEmail: true },
       consumer2: { role: "user", shareEmail: false }
@@ -107,7 +109,7 @@ const getLogin = (req, res, next) => {
   }
 
   const { redirectURL } = req.query;
-  const sid = encode();
+  const sid = encode(); //sessionID
   req.session.user = sid;
   //session cache
   userSession[sid] = email;

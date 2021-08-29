@@ -6,12 +6,12 @@ const JWTURL = "http://localhost:3010/auth/verifytoken";
 
 const check = () => {
   return async function(req, res, next) {
-    // check if the req has the queryParameter as authToken
-    // and who is the referer.
+    
+    //get the authToken
     const { authToken } = req.query;
     
     if (authToken != null) {
-      // to remove the authToken in query parameter redirect.
+      //get redirectURL
       const redirectURL = url.parse(req.url).pathname;
       try {
         const response = await axios.get(

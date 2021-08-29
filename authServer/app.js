@@ -29,6 +29,7 @@ app.set("view engine", "ejs");
 
 app.use("/auth", routes);
 
+//Home page
 app.get("/", (req, res, next) => {
   const user = req.session.user || "unlogged";
   res.render("index", {
