@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const engine = require("ejs-mate");
 const session = require("express-session");
-const routes = require("./routes");
+const routes = require("./routes/router");
 
 const app = express();
 
@@ -63,5 +63,5 @@ app.use((req, res, next) => {
   const PORT = 3010;
   
   app.listen(PORT, () => {
-    console.info(`consumer1 listening on port ${PORT}`);
+    console.info(`Auth Server listening on port ${PORT}`);
   });

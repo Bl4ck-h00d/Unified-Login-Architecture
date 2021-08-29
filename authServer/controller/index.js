@@ -19,12 +19,12 @@ function parseHeader(headerValue) {
 
 //get the token from header
 const fromAuthHeader = function(authScheme) {
-  const authScheme = authScheme.toLowerCase();
+  const authSchemeLower = authScheme.toLowerCase();
   return function(request) {
     let token = null;
     if (request.headers[AUTH]) {
       const authParams = parseHeader(request.headers[AUTH]);
-      if (authParams && authScheme === authParams.scheme.toLowerCase()) {
+      if (authParams && authSchemeLower === authParams.scheme.toLowerCase()) {
         token = authParams.value;
       }
     }
@@ -104,7 +104,7 @@ const getLogin = (req, res, next) => {
   }
 
   const { redirectURL } = req.query;
-  const sid = encodedId();
+  const sid = encode();
   req.session.user = sid;
   //session cache
   userSession[sid] = email;
@@ -112,7 +112,7 @@ const getLogin = (req, res, next) => {
     return res.redirect("/");
   }
   const url = new URL(redirectURL);
-  const authToken = encodedId();
+  const authToken = encode();
 
   cacheApp(url.origin, sid, authToken);
   return res.redirect(`${redirectURL}?authToken=${authToken}`);
@@ -125,7 +125,7 @@ const login = (req, res, next) => {
   if (redirectURL != null) {
     const url = new URL(redirectURL);
     //check if consumer is of valid origin
-    if (alloweOrigin[url.origin] !== true) {
+    if (allowedConsumers[url.origin] !== true) {
       return res
         .status(400)
         .json({ message: "Wait a minute! who are you?" });
@@ -139,7 +139,7 @@ const login = (req, res, next) => {
   // if already authenticated (has global session set)
   if (req.session.user != null && redirectURL != null) {
     const url = new URL(redirectURL);
-    const authToken = encodedId();
+    const authToken = encode();
     cacheApp(url.origin, req.session.user, authToken);
     return res.redirect(`${redirectURL}?authToken=${authToken}`);
   }

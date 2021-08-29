@@ -1,6 +1,7 @@
 const url = require("url");
 const axios = require("axios");
 const { URL } = url;
+const { verifyJwtToken } = require("./jwt");
 const JWTURL = "http://localhost:3010/auth/verifytoken";
 
 const check = () => {
@@ -21,7 +22,10 @@ const check = () => {
             }
           }
         );
-        //Incomplete
+        const { token } = response.data;
+        const decodedToken = await verifyJwtToken(token);
+
+        req.session.user = decodedToken;
         
       } catch (err) {
         return next(err);

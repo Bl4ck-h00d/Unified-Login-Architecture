@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const { privateKey } = require("../config").keys;
+const { privateKey } = require("../config/keys/script");
 
 
 
