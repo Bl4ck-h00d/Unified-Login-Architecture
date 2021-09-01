@@ -34,3 +34,4 @@ Now check other consumer website, you will see that you are already logged in.
 
 
 
+http://localhost:3010/auth/login?redirectURL=http://127.0.0.1:3020/

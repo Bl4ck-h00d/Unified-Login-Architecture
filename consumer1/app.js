@@ -8,6 +8,7 @@ const app = express();
 const isAuthenticated = require("./isAuthenticated");
 const checkToken = require("./checkToken");
 
+//local session
 app.use(
   session({
     secret: "udfhjenfu",

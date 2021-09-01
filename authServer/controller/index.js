@@ -178,7 +178,7 @@ const generatePayload = authToken => {
 
 
 const verifyAuthToken = async (req, res, next) => {
-  const consumerToken = appTokenFromReq(req);
+  const consumerToken = appTokenFromReq(req); //trust token
   const { authToken } = req.query;
   
   if (
@@ -191,7 +191,7 @@ const verifyAuthToken = async (req, res, next) => {
 
   
   const appName = authTokenCache[authToken][1];
-  const globalSessionToken = authTokenCache[authToken][0];
+  const globalSessionToken = authTokenCache[authToken][0]; //sid
   
 //Check if app is registered and has been looged in
   if (
